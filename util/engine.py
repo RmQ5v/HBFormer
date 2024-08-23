@@ -1,5 +1,4 @@
 import torch
-# from sklearn.metrics import roc_auc_score, accuracy_score, precision_score, f1_score, recall_score, matthews_corrcoef, average_precision_score, confusion_matrix
 from .metrics import accuracy, auc, sensitivity, specificity, AUPRC, mcc_score, precision, recall, f1_score
 import numpy as np
 from tqdm import tqdm
@@ -10,8 +9,6 @@ import torch.distributed as dist
 
 def train_one_epoch(model: torch.nn.Module,embedder,criterion,data_loader,
                     optimizer: torch.optim.Optimizer,loss_scaler,add_fea,args):
-    # print(optimizer.state_dict()['param_groups'][0]['lr'])
-    # return
     model.train()
     total_iter = len(data_loader)
     print_interval = 5
@@ -25,23 +22,11 @@ def train_one_epoch(model: torch.nn.Module,embedder,criterion,data_loader,
             with torch.cuda.amp.autocast():
                 preds = model(human_emb,virus_emb,human_pro_add,virus_pro_add)
                 loss = criterion(preds,label)
-        else:
-            # human_seq, virus_seq, label = full_data
-            # label = label.cuda()
-            # with torch.no_grad():
-            #     human_emb = list(embedder.embed_many(human_seq))
-            #     virus_emb = list(embedder.embed_many(virus_seq))
-            # with torch.cuda.amp.autocast():
-            #     preds = model(human_emb,virus_emb)
-            #     loss = criterion(preds,label)
-                
+        else:           
             human_emb, virus_emb, label = full_data
             human_emb = human_emb.cuda().half()
             virus_emb = virus_emb.cuda().half()
             label = label.cuda()
-            # with torch.no_grad():
-            #     human_emb = list(embedder.embed_many(human_seq))
-            #     virus_emb = list(embedder.embed_many(virus_seq))
             with torch.cuda.amp.autocast():
                 preds = model(human_emb,virus_emb)
                 loss = criterion(preds,label)
@@ -52,10 +37,6 @@ def train_one_epoch(model: torch.nn.Module,embedder,criterion,data_loader,
             cur_lr = optimizer.state_dict()['param_groups'][0]['lr']
             print("{}/{} lr:{} loss:{}".format(iter, total_iter, cur_lr, loss.item()))
             
-    # if args.output_dir and utils.is_main_process():
-    #     output_dir = Path(args.output_dir)
-    #     with (output_dir / "log.txt").open("a") as f:
-    #         f.write("{}/{} lr:{} loss:{} \n".format(iter, total_iter, cur_lr, loss.item()))
 
 @torch.no_grad()            
 def evaluate(model: torch.nn.Module,embedder,criterion,data_loader,add_fea,epoch,args):
@@ -73,27 +54,15 @@ def evaluate(model: torch.nn.Module,embedder,criterion,data_loader,add_fea,epoch
             with torch.cuda.amp.autocast():
                 preds = model(human_emb,virus_emb,human_pro_add,virus_pro_add)
                 loss = criterion(preds,label)
-        else:
-            # human_seq, virus_seq, label = full_data
-            # label = label.cuda()
-            # human_emb = list(embedder.embed_many(human_seq))
-            # virus_emb = list(embedder.embed_many(virus_seq))
-            # with torch.cuda.amp.autocast():
-            #     preds = model(human_emb,virus_emb)
-            #     loss = criterion(preds,label)
-                
+        else:   
             human_emb, virus_emb, label = full_data
             label = label.cuda()
             human_emb = human_emb.cuda().half()
             virus_emb = virus_emb.cuda().half()
-            # human_emb = list(embedder.embed_many(human_seq))
-            # virus_emb = list(embedder.embed_many(virus_seq))
             with torch.cuda.amp.autocast():
                 preds = model(human_emb,virus_emb)
                 loss = criterion(preds,label)
         preds = torch.sigmoid(preds)
-        # preds[torch.where(preds>=0.5)] = 1.
-        # preds[torch.where(preds<0.5)] = 0.
         preds_item_list.append(preds)
         labels_item_list.append(label)
         acc1 = accuracy(label.cpu().numpy().copy(), preds.cpu().numpy().copy())
