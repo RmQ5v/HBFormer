@@ -1,10 +1,9 @@
 from bio_embeddings.embed import ProtTransT5XLU50Embedder, ESM1bEmbedder, BeplerEmbedder, Word2VecEmbedder, FastTextEmbedder
-from models import Tran_PPI, OSI
+from models import OSI
 import torch
 from util import get_dataloader
 from tqdm import tqdm
 import numpy as np
-# from sklearn.metrics import accuracy_score
 from timm.utils import accuracy
 from util import accuracy, auc, sensitivity, specificity, AUPRC, mcc_score, precision, recall, f1_score
 import util.utils as utils

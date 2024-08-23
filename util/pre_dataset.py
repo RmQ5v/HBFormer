@@ -6,9 +6,6 @@ import importlib
 from torch.nn import functional as F
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
-# from gensim.models import KeyedVectors,word2vec,Word2Vec
-# from bio_embeddings.embed import Word2VecEmbedder,ESM1bEmbedder, ProtTransBertBFDEmbedder
-# from bio_embeddings.embed import ProtTransBertBFDEmbedder, BeplerEmbedder
 from torch.utils.data import WeightedRandomSampler
 from torch.utils.data.distributed import DistributedSampler
 import json

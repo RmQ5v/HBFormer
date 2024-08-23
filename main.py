@@ -1,5 +1,5 @@
 from util import get_dataloader, train_one_epoch, evaluate
-from models import Tran_PPI, OSI, SA_OSI, CA_OSI, transppi
+from models import OSI
 from pathlib import Path
 from timm.scheduler import create_scheduler
 from timm.optim import create_optimizer_v2
