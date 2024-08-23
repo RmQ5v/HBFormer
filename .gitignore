@@ -1,0 +1,10 @@
+__pycache__
+data_full
+debug.py
+*.zip
+outputs
+.vscode
+*.sh
+*.out
+*.csv
+*.npy
