@@ -24,12 +24,13 @@ pip install -r requirements.txt
 
 ### Data Preparation
 
-Prepare the benchmark(http://kurata35.bio.kyutech.ac.jp/LSTM-PHV/download_page) dataset in `<BASE_FOLDER>/data_full/`.
-Download the annotation file() in `<BASE_FOLDER>/data_full/`.
+Step1. Prepare the [benchmark dataset](http://kurata35.bio.kyutech.ac.jp/LSTM-PHV/download_page) in `<BASE_FOLDER>/data_full/`.
+
+Step2. Download the [annotation file](https://drive.google.com/file/d/18YZe2UwAFkHRDh2sRUvRr5-QYeT3IQRK/view?usp=sharing) in `<BASE_FOLDER>/data_full/`.
 
 ### Testing
 
-download checkpoints() to `<BASE_FOLDER>/checkpoints/`
+Download [checkpoints](https://drive.google.com/file/d/1ihNe4vYhf8ZqIcau5KWxiVQvkALLmqVT/view?usp=sharing) to `<BASE_FOLDER>/checkpoints/` and set $folder_number.
 
 ```bash
 python -m torch.distributed.launch --nproc_per_node=4 eval.py \

@@ -138,24 +138,6 @@ def evaluate(model: torch.nn.Module,embedder,criterion,data_loader,add_fea):
                     .format(auc_all, pre_score_all, re_score_all, f1, mcc, auprc_all, sp, acc_all, losses=metric_logger.loss))
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
-    # print('* Acc@1 {top1.global_avg:.3f} loss {losses.global_avg:.3f}'
-    #     .format(top1=metric_logger.acc1, losses=metric_logger.loss))
-    #     preds = torch.sigmoid(preds)
-    #     print(preds)
-    #     print(label)
-    #     auc_pred = np.append(auc_pred,preds.cpu().numpy().copy())
-    #     auc_label = np.append(auc_label,label.cpu().numpy().copy())
-    #     loss_avg += loss.item()
-    #     preds[torch.where(preds>=0.5)] = 1.
-    #     preds[torch.where(preds<0.5)] = 0.
-    #     print(preds)
-    #     correct_num += (preds==label).sum()
-    #     total_num += len(human_seq)
-    # loss_avg /= total_iter
-    # acc_total = correct_num / total_num
-    # auc_score = roc_auc_score(auc_label, auc_pred)
-    # print("acc: {} auc: {} loss: {}".format(acc_total, auc_score, loss_avg))
-    # return acc_total
 
 def main(args):
     
