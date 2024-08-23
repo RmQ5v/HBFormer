@@ -115,9 +115,7 @@ def main(args):
         # embedder = w2v()
     else:
         raise ValueError('no such embedding method')
-    # model = Tran_PPI(embedder.embedding_dimension, args.width, args.relative_pos, args.key_analysis, args.method)
-    model = transppi(64)
-    # model = OSI(embedder.embedding_dimension, args.width, args.num_heads, args.depth)
+    model = OSI(embedder.embedding_dimension, args.width, args.num_heads, args.depth)
     print(model)
     if args.resume:
         checkpoint = torch.load(args.resume,map_location='cpu')
@@ -137,22 +135,18 @@ def main(args):
                                                       output_device=local_rank)
     model_without_ddp = model.module
     optimizer = create_optimizer_v2(model_without_ddp,opt='adamw', lr=args.lr, weight_decay=args.weight_decay, betas=(0.9, 0.999))
-    # optimizer = torch.optim.AdamW(model_without_ddp.parameters(),lr=args.lr,weight_decay=args.weight_decay)
     lr_scheduler, _ = create_scheduler(args, optimizer)
     loss_scaler = NativeScaler()
     if args.resume:
         optimizer.load_state_dict(checkpoint['optimizer'])
-        # lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
         loss_scaler.load_state_dict(checkpoint['scaler'])
 
-    # loss_fn = torch.nn.BCEWithLogitsLoss()
     loss_fn = utils.Focal_Loss(alpha=args.alpha,reduction="mean")
     
     torch.distributed.barrier()
     
     
     print("start training")
-    max_acc = 0.0
     if args.output_dir:
         os.makedirs(args.output_dir,exist_ok=True)
     for epoch in range(start_epoch, args.epochs):
@@ -161,8 +155,6 @@ def main(args):
         print("epoch:{}".format(epoch+1))
         train_one_epoch(model,embedder,loss_fn,train_loader,optimizer,loss_scaler,args.add_fea,args)
         test_stats = evaluate(model,embedder,loss_fn,test_loader,args.add_fea,epoch,args)
-        # if max_acc < test_stats["acc1"]:
-            # max_acc = test_stats["acc1"]
         if args.output_dir:
             checkpoint_path = os.path.join(args.output_dir,"checkpoint{}.pth".format(epoch))
             utils.save_on_master({
