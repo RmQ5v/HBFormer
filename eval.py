@@ -13,7 +13,7 @@ import argparse
 
 def get_args_parser():
     parser = argparse.ArgumentParser(
-        'trans-ppi training and evaluation script', add_help=False)
+        'HBFormer training and evaluation script', add_help=False)
     parser.add_argument('--batch_size', default=1024, type=int)
     parser.add_argument('--epochs', default=20, type=int)
     parser.add_argument('--num_workers', default=8, type=int)
@@ -172,6 +172,6 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        'trans-ppi evaluation script', parents=[get_args_parser()])
+        'HBFormer evaluation script', parents=[get_args_parser()])
     args = parser.parse_args()
     main(args)
