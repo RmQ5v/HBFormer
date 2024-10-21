@@ -30,6 +30,8 @@ Step2. Download the [annotation file](https://drive.google.com/file/d/18YZe2UwAF
 
 ### Training
 
+Please set $folder_number before running the training process.
+
 ```bash
 python -m torch.distributed.launch --nproc_per_node=4 main.py \
     --output_dir /path/to/output --batch_size 256 --embed_method pt5 --depth 1 \
@@ -39,7 +41,7 @@ python -m torch.distributed.launch --nproc_per_node=4 main.py \
 
 ### Testing
 
-Use the above trained weights` and set $folder_number to evaluate the model performance.
+Use the above trained weights or download [checkpoints](https://drive.google.com/file/d/1ihNe4vYhf8ZqIcau5KWxiVQvkALLmqVT/view?usp=sharing) to evaluate the model performance.
 
 ```bash
 python -m torch.distributed.launch --nproc_per_node=4 eval.py \
